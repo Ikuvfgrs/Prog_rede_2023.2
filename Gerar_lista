@@ -1,0 +1,63 @@
+import random
+
+def ler_valor_positivo(mensagem):
+    while True:
+        try:
+            valor = int(input(mensagem))
+            if valor > 0:
+                return valor
+            else:
+                print("Por favor, insira um valor inteiro positivo maior que zero.")
+        except ValueError:
+            print("Por favor, insira um valor inteiro válido.")
+
+def gerar_lista(quantidade, valor_minimo, valor_maximo):
+    try:
+        if quantidade <= 0:
+            return False, None
+
+        lista = []
+        for _ in range(quantidade):
+            lista.append(random.randint(valor_minimo, valor_maximo))
+
+        return True, lista
+    except ValueError:
+        return False, None
+
+def salvar_lista(nome_lista, nome_arquivo):
+    try:
+        with open(nome_arquivo, 'w') as arquivo:
+            for valor in nome_lista:
+                arquivo.write(str(valor) + '\n')
+        return True
+    except Exception as e:
+        print(f"Erro ao salvar a lista: {str(e)}")
+        return False
+
+if __name__ == "__main__":
+    try:
+        quantidade = ler_valor_positivo("Digite a quantidade de números da lista (deve ser maior que zero): ")
+        valor_minimo = ler_valor_positivo("Digite o valor mínimo para a lista: ")
+        valor_maximo = ler_valor_positivo("Digite o valor máximo para a lista: ")
+
+        sucesso, lista = gerar_lista(quantidade, valor_minimo, valor_maximo)
+
+        if sucesso:
+            print("Conseguiu gerar a lista:")
+            print(lista)
+            nome_lista = lista
+            nome_arquivo = "lista.txt"  # Defina o nome do arquivo
+            sucesso_salvar = salvar_lista(nome_lista, nome_arquivo)
+
+            if sucesso_salvar:
+                print(f"Lista gerada e salva com sucesso no arquivo {nome_arquivo}")
+            else:
+                print("Erro ao salvar a lista.")
+        else:
+            print("Não conseguiu gerar a lista.")
+
+    except KeyboardInterrupt:
+        print("Programa encerrado pelo usuário.")
+    except Exception as e:
+        print(f"Ocorreu um erro inesperado: {str(e)}")
+
